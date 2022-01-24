@@ -1,13 +1,16 @@
 {% extends 'navbar.html' %}
 {% load static %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/room.css' %}">
-<script src="{% static 'js/room.js' %}"></script>
 
-
-<div id="background">
-    <div id="monke"></div>
+<h3 class="text-white" id="label-username" style="display: flex; justify-content: center ">USERNAME</h3>
+<div style="display:flex; justify-content: center; flex-direction: column">
+    <input type="text" id="username">
+    <button id="btn-join">Join Room</button>
 </div>
 
+<div id="background">
+</div>
 
+<link rel="stylesheet" href="{% static 'css/room.css' %}">
+<script src="{% static 'js/room.js' %}"></script>
 {% endblock content %}

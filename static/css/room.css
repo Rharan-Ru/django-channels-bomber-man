@@ -5,7 +5,7 @@
     position:relative;
 }
 
-#monke {
+.players {
     position:absolute;
     height:40px;
     width:40px;
