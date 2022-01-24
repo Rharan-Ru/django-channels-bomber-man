@@ -5,7 +5,7 @@ Silly multiplayer game that remember bomberman or something like this hahaha... 
 ## Quickly setup to start
 
 ````
-git clone 
+git clone https://github.com/Rharan-Ru/django-channels-bomber-man.git
 cd django-channels-bomber-man
 ````
 
