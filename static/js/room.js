@@ -45,10 +45,14 @@ btnJoin.addEventListener('click', () => {
         var data = JSON.parse(e.data);
         console.log(data);
         if (data.playerData) {
+<<<<<<< HEAD
             createPlayer(data.playerData);
         };
         if (data.otherPlayers) {
             createOtherPlayers(data.otherPlayers);
+=======
+            createPlayer(data.playerData, data.otherPlayers);
+>>>>>>> 09e8ae856b36d180f93968f1cc7470a60fe872da
         };
         if (data.playerRemoved) {
             removePlayer(data.playerRemoved);
@@ -65,6 +69,7 @@ function newPlayer(player) {
     }));
 };
 
+<<<<<<< HEAD
 var BeginningPosX = 0;
 var BeginningPosY = 0;
 var edgeX = 560;
@@ -135,6 +140,35 @@ function initGame(){
                 break;
             case bomb:
                 console.log('Boom')
+=======
+function createPlayer(user, users) {
+    console.log(Object.keys(user));
+    var arena = document.querySelector('#background');
+    var Player = document.createElement('div');
+    Player.id = Object.keys(user);
+    Player.className = 'players';
+    Player.style.left = users.pos_x + "px";
+    Player.style.top = users.pos_y + "px";
+    arena.appendChild(Player);
+    if (username === Object.keys(user)){
+        createOtherPlayers(users, user);
+    };
+    initGame(Player);
+};
+
+function createOtherPlayers(users, new_player) {
+    var arena = document.querySelector('#background');
+    console.log(users)
+    for (player in users) {
+        if (player != new_player) {
+            console.log(player, users[player]);
+            var Player = document.createElement('div');
+            Player.id = player;
+            Player.className = 'players';
+            Player.style.left = users[player].pos_x + "px";
+            Player.style.top = users[player].pos_y + "px";
+            arena.appendChild(Player);
+>>>>>>> 09e8ae856b36d180f93968f1cc7470a60fe872da
         };
     };
 };
@@ -144,6 +178,7 @@ function changePosition(player, x, y) {
     Player.style.left = x + "px";
     Player.style.top = y + "px";
 };
+<<<<<<< HEAD
 
 function createPlayer(user) {
     var arena = document.querySelector('#background');
@@ -181,3 +216,64 @@ window.onbeforeunload = function() {
     }, 0);
     window.onbeforeunload = null; // necessary to prevent infinite loop, that kills your browser
 };
+=======
+
+function initGame(jogador){
+    console.log("created");
+    Player = document.querySelector('#' + jogador.id);
+    console.log('teste', Player.style.left);
+    var BeginningPosX = Player.style.left;
+    var BeginningPosY = Player.style.top;
+    var edgeX = 560;
+    var edgeY = 360;
+    document.onkeydown = KeyPressed;
+    function KeyPressed(k) {
+        console.log(k.keyCode)
+        var LeftBtn = 37;
+        var RightBtn = 39;
+        var UpBtn = 38;
+        var DownBtn = 40;
+        var bomb = 90;
+
+        switch (k.keyCode) {
+            case RightBtn:
+                console.log(BeginningPosX);
+                BeginningPosX = BeginningPosX += 40;
+                if (BeginningPosX > edgeX) {
+                    BeginningPosX = edgeX;
+                };
+                Player.style.left = BeginningPosX + "px";
+                break;
+            case LeftBtn:
+                console.log(BeginningPosX);
+                BeginningPosX = BeginningPosX -= 40;
+                if (BeginningPosX < 0) {
+                    BeginningPosX = 0;
+                };
+                Player.style.left = BeginningPosX + "px";
+                break;
+            case UpBtn:
+                console.log(BeginningPosY);
+                BeginningPosY = BeginningPosY -= 40;
+                if (BeginningPosY < 0) {
+                    BeginningPosY = 0;
+                };
+                Player.style.top = BeginningPosY + "px";
+                break;
+            case DownBtn:
+                console.log(BeginningPosY);
+                BeginningPosY = BeginningPosY += 40;
+                if (BeginningPosY > edgeY) {
+                    BeginningPosY = edgeY;
+                };
+                Player.style.top = BeginningPosY + "px";
+                break;
+        };
+        webSocket.send(JSON.stringify({
+            'player': Player.id,
+            'pos-x': BeginningPosX,
+            'pos-y': BeginningPosY,
+        }));
+    };
+};
+>>>>>>> 09e8ae856b36d180f93968f1cc7470a60fe872da

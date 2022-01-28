@@ -3,6 +3,8 @@
     width:600px;
     outline: 5px solid black;
     position:relative;
+    margin: auto;
+    margin-top: 10px;
 }
 
 #container {
@@ -17,7 +19,12 @@
     position:absolute;
     height:40px;
     width:40px;
+<<<<<<< HEAD
     outline: 2px solid lightblue;
     background-color: black;
+=======
+    outline: 2px solid black;
+    background-color: lightblue;
+>>>>>>> 09e8ae856b36d180f93968f1cc7470a60fe872da
     color:#fff;
 }
