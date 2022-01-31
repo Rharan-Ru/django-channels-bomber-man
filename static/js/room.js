@@ -43,7 +43,6 @@ btnJoin.addEventListener('click', () => {
 
     webSocket.onmessage = function(e) {
         var data = JSON.parse(e.data);
-        console.log(data);
         if (data.playerData) {
             createPlayer(data.playerData);
         };
@@ -78,63 +77,75 @@ function initGame(){
         var UpBtn = 38;
         var DownBtn = 40;
         var bomb = 90;
-
-        console.log(k.keyCode);
         switch (k.keyCode) {
             case RightBtn:
-                console.log(BeginningPosX);
                 BeginningPosX = BeginningPosX += 40;
+                var x_y = `[${BeginningPosX}px,${BeginningPosY}px]`;
+                var colision = verifyColision(x_y);
                 if (BeginningPosX > edgeX) {
                     BeginningPosX = edgeX;
+                    break;
+                };
+                if else (colision == true) {
+                    BeginningPosX = BeginningPosX -= 40;
                 };
                 Player.style.left = BeginningPosX + "px";
-                webSocket.send(JSON.stringify({
-                    'player': Player.id,
-                    'pos-x': BeginningPosX,
-                    'pos-y': BeginningPosY,
-                }));
                 break;
             case LeftBtn:
-                console.log(BeginningPosX);
                 BeginningPosX = BeginningPosX -= 40;
+                var x_y = `[${BeginningPosX}px,${BeginningPosY}px]`;
+                var colision = verifyColision(x_y);
                 if (BeginningPosX < 0) {
                     BeginningPosX = 0;
+                    break;
+                };
+                if else (colision == true) {
+                    BeginningPosX = BeginningPosX += 40;
                 };
                 Player.style.left = BeginningPosX + "px";
-                webSocket.send(JSON.stringify({
-                    'player': Player.id,
-                    'pos-x': BeginningPosX,
-                    'pos-y': BeginningPosY,
-                }));
                 break;
             case UpBtn:
-                console.log(BeginningPosY);
                 BeginningPosY = BeginningPosY -= 40;
+                var x_y = `[${BeginningPosX}px,${BeginningPosY}px]`;
+                var colision = verifyColision(x_y);
                 if (BeginningPosY < 0) {
                     BeginningPosY = 0;
+                    break;
                 };
-                Player.style.top = BeginningPosY + "px";
-                webSocket.send(JSON.stringify({
-                    'player': Player.id,
-                    'pos-x': BeginningPosX,
-                    'pos-y': BeginningPosY,
-                }));
+                if else (colision == true) {
+                    BeginningPosY = BeginningPosY += 40;
+                };
+                var x_y = `[${BeginningPosX}px,${BeginningPosY}px]`;
                 break;
             case DownBtn:
-                console.log(BeginningPosY);
                 BeginningPosY = BeginningPosY += 40;
+                var x_y = `[${BeginningPosX}px,${BeginningPosY}px]`;
+                var colision = verifyColision(x_y);
                 if (BeginningPosY > edgeY) {
                     BeginningPosY = edgeY;
+                    break;
                 };
                 Player.style.top = BeginningPosY + "px";
-                webSocket.send(JSON.stringify({
-                    'player': Player.id,
-                    'pos-x': BeginningPosX,
-                    'pos-y': BeginningPosY,
-                }));
                 break;
             case bomb:
-                console.log('Boom')
+                console.log('Boom');
+                break;
+        };
+        if (k.keyCode === UpBtn || k.keyCode === DownBtn || k.keyCode === LeftBtn || k.keyCode === RightBtn ) {
+            webSocket.send(JSON.stringify({
+                'player': Player.id,
+                'pos-x': BeginningPosX,
+                'pos-y': BeginningPosY,
+            }));
+        };
+    };
+    function verifyColision(x_y) {
+        var ids = [...document.querySelectorAll('#background > div')].map(({ id, style }) => `[${style.left},${style.top}]`);
+        if (ids.includes(x_y)){
+            console.log('teste');
+            return true;
+        };
+    };
 };
 
 function changePosition(player, x, y) {
