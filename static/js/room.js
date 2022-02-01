@@ -1,5 +1,3 @@
-console.log('Hello guys');
-
 var usernameInput = document.querySelector('#username');
 var btnJoin = document.querySelector('#btn-join');
 var username;
@@ -64,11 +62,13 @@ function newPlayer(player) {
     }));
 };
 
-var BeginningPosX = 0;
-var BeginningPosY = 0;
-var edgeX = 560;
-var edgeY = 360;
-function initGame(){
+function initGame(user){
+    if (user === username) {
+        var BeginningPosX = 0;
+        var BeginningPosY = 0;
+    };
+    var edgeX = 560;
+    var edgeY = 360;
     document.onkeydown = KeyPressed;
     function KeyPressed(k) {
         Player = document.querySelector('#' + username);
@@ -79,50 +79,61 @@ function initGame(){
         var bomb = 90;
         switch (k.keyCode) {
             case RightBtn:
-                BeginningPosX = BeginningPosX += 40;
-                var x_y = `[${BeginningPosX}px,${BeginningPosY}px]`;
+                var teste = BeginningPosX + 40;
+                var x_y = `[${teste}px,${BeginningPosY}px]`;
                 var colision = verifyColision(x_y);
-                if (BeginningPosX > edgeX) {
-                    BeginningPosX = edgeX;
+                if (colision != true) {
+                    if (teste > edgeX) {
+                        BeginningPosX = edgeX;
+                        break;
+                    };
+                    BeginningPosX = BeginningPosX += 40;
+                    sendMove();
                     break;
-                };
-                if else (colision == true) {
-                    BeginningPosX = BeginningPosX -= 40;
                 };
                 Player.style.left = BeginningPosX + "px";
                 break;
             case LeftBtn:
-                BeginningPosX = BeginningPosX -= 40;
-                var x_y = `[${BeginningPosX}px,${BeginningPosY}px]`;
+                var teste = BeginningPosX - 40;
+                var x_y = `[${teste}px,${BeginningPosY}px]`;
                 var colision = verifyColision(x_y);
-                if (BeginningPosX < 0) {
-                    BeginningPosX = 0;
+                if (colision != true) {
+                    if (teste < 0) {
+                        BeginningPosX = 0;
+                        break;
+                    };
+                    BeginningPosX = BeginningPosX -= 40;
+                    sendMove();
                     break;
-                };
-                if else (colision == true) {
-                    BeginningPosX = BeginningPosX += 40;
                 };
                 Player.style.left = BeginningPosX + "px";
                 break;
             case UpBtn:
-                BeginningPosY = BeginningPosY -= 40;
-                var x_y = `[${BeginningPosX}px,${BeginningPosY}px]`;
+                var teste = BeginningPosY - 40;
+                var x_y = `[${BeginningPosX}px,${teste}px]`;
                 var colision = verifyColision(x_y);
-                if (BeginningPosY < 0) {
-                    BeginningPosY = 0;
+                if (colision != true) {
+                    if (teste < 0) {
+                        BeginningPosY = 0;
+                        break;
+                    };
+                    BeginningPosY = BeginningPosY -= 40;
+                    sendMove();
                     break;
                 };
-                if else (colision == true) {
-                    BeginningPosY = BeginningPosY += 40;
-                };
-                var x_y = `[${BeginningPosX}px,${BeginningPosY}px]`;
+                Player.style.top = BeginningPosY + "px";
                 break;
             case DownBtn:
-                BeginningPosY = BeginningPosY += 40;
-                var x_y = `[${BeginningPosX}px,${BeginningPosY}px]`;
+                var teste = BeginningPosY + 40;
+                var x_y = `[${BeginningPosX}px,${teste}px]`;
                 var colision = verifyColision(x_y);
-                if (BeginningPosY > edgeY) {
-                    BeginningPosY = edgeY;
+                if (colision != true) {
+                    if (teste > edgeY) {
+                        BeginningPosY = edgeY;
+                        break;
+                    };
+                    BeginningPosY = BeginningPosY += 40;
+                    sendMove();
                     break;
                 };
                 Player.style.top = BeginningPosY + "px";
@@ -131,18 +142,17 @@ function initGame(){
                 console.log('Boom');
                 break;
         };
-        if (k.keyCode === UpBtn || k.keyCode === DownBtn || k.keyCode === LeftBtn || k.keyCode === RightBtn ) {
-            webSocket.send(JSON.stringify({
-                'player': Player.id,
-                'pos-x': BeginningPosX,
-                'pos-y': BeginningPosY,
-            }));
-        };
+    };
+    function sendMove() {
+        webSocket.send(JSON.stringify({
+            'player': Player.id,
+            'pos-x': BeginningPosX,
+            'pos-y': BeginningPosY,
+        }));
     };
     function verifyColision(x_y) {
         var ids = [...document.querySelectorAll('#background > div')].map(({ id, style }) => `[${style.left},${style.top}]`);
         if (ids.includes(x_y)){
-            console.log('teste');
             return true;
         };
     };
@@ -160,7 +170,9 @@ function createPlayer(user) {
     Player.id = user;
     Player.className = 'players';
     arena.appendChild(Player);
-    initGame();
+    if (user === username) {
+        initGame(user);
+    }
 };
 
 function createOtherPlayers(users) {
