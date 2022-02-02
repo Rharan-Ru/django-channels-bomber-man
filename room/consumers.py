@@ -66,6 +66,16 @@ class RoomConsumer(AsyncWebsocketConsumer):
                     'pos-y': pos_y,
                 }
             )
+        elif 'bomb' in receive_dict:
+            bomb_position = receive_dict['bomb']
+            print(bomb_position)
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'create_bomb',
+                    'bomb': bomb_position,
+                }
+            )
         elif 'remove-player' in receive_dict:
             player_removed = receive_dict['remove-player']
             players.pop(player_removed)
@@ -84,6 +94,14 @@ class RoomConsumer(AsyncWebsocketConsumer):
         new_player = event['new-player']
         await self.send(json.dumps({
             'playerData': new_player,
+        }))
+
+    async def create_bomb(self, event):
+        print("CreateBomb-room data:")
+        print(event)
+        bomb = event['bomb']
+        await self.send(json.dumps({
+            'bomb': bomb,
         }))
 
     async def new_player(self, event):

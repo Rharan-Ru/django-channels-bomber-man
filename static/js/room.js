@@ -53,12 +53,21 @@ btnJoin.addEventListener('click', () => {
         if (data.player) {
             changePosition(data.player, data.posX, data.posY);
         };
+        if (data.bomb) {
+            createBomb(data.bomb);
+        };
     };
 });
 
 function newPlayer(player) {
     webSocket.send(JSON.stringify({
         'new-player': player,
+    }));
+};
+
+function sendCreateBomb(position) {
+    webSocket.send(JSON.stringify({
+        'bomb': position,
     }));
 };
 
@@ -140,6 +149,7 @@ function initGame(user){
                 break;
             case bomb:
                 console.log('Boom');
+                sendCreateBomb({'x': BeginningPosX, 'y': BeginningPosY});
                 break;
         };
     };
@@ -173,6 +183,16 @@ function createPlayer(user) {
     if (user === username) {
         initGame(user);
     }
+};
+
+function createBomb(position) {
+    console.log(position);
+    var arena = document.querySelector('#background');
+    var bomb = document.createElement('div');
+    bomb.className = 'bomb';
+    bomb.style.left = position.x + "px";
+    bomb.style.top = position.y + "px";
+    arena.appendChild(bomb);
 };
 
 function createOtherPlayers(users) {

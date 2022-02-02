@@ -16,10 +16,20 @@
 }
 
 .players {
-    position:absolute;
+    position: absolute;
     height:40px;
     width:40px;
     outline: 2px solid lightblue;
     background-color: black;
     color:#fff;
+}
+
+.bomb {
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    outline: 1px solid black;
+    background-color: red;
+    color: #fff;
 }
