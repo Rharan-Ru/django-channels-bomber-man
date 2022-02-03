@@ -189,10 +189,28 @@ function createBomb(position) {
     console.log(position);
     var arena = document.querySelector('#background');
     var bomb = document.createElement('div');
+    bomb.id = 'bomb';
     bomb.className = 'bomb';
     bomb.style.left = position.x + "px";
     bomb.style.top = position.y + "px";
+    bomb.innerHTML = 5;
     arena.appendChild(bomb);
+
+    var filas = [];
+    var time = 5;
+    var myVar = setInterval(explode, 1000);
+    filas.push(myVar);
+
+    function explode(){
+        time -=1;
+        var bomb = document.querySelector('#bomb');
+        bomb.innerHTML = time;
+        if(time == 0){
+            var bomb = document.querySelector('#bomb');
+            bomb.parentNode.removeChild(bomb);
+            filas.forEach(clearInterval);
+        };
+    };
 };
 
 function createOtherPlayers(users) {
